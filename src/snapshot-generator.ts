@@ -22,6 +22,7 @@ export type SnapshotConfig = {
   job?: any;
   sha?: any;
   ref?: any;
+  matrixIdentifier?: string;
 };
 
 export async function generateSnapshot(directory: string, mvnConfig?: MavenConfiguration, snapshotConfig?: SnapshotConfig) {
@@ -44,8 +45,14 @@ export async function generateSnapshot(directory: string, mvnConfig?: MavenConfi
       manifest = mavenDependencies.createManifest();
     }
 
+    core.info(`Snapshot config: ${JSON.stringify(snapshotConfig)}`);
+
     const snapshot = new Snapshot(getDetector(), snapshotConfig?.context, snapshotConfig?.job);
     snapshot.addManifest(manifest);
+
+    snapshot.job.id = snapshotConfig?.matrixIdentifier
+      ? `${snapshot.job?.id}-${snapshotConfig?.matrixIdentifier}`
+      : snapshot?.job?.id;
 
     const specifiedRef = getNonEmtptyValue(snapshotConfig?.ref);
     if (specifiedRef) {

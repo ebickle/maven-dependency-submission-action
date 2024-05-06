@@ -245,12 +245,15 @@ function run() {
                 settingsFile: core.getInput('settings-file'),
                 mavenArgs: core.getInput('maven-args') || '',
             };
+            const matrixIdentifier = core.getInput('matrix-identifier');
             const snapshotConfig = {
                 includeManifestFile: core.getBooleanInput('snapshot-include-file-name'),
                 manifestFile: core.getInput('snapshot-dependency-file-name'),
                 sha: core.getInput('snapshot-sha'),
                 ref: core.getInput('snapshot-ref'),
+                matrixIdentifier: matrixIdentifier
             };
+            core.info(`Snapshot config: ${JSON.stringify(snapshotConfig)}`);
             snapshot = yield (0, snapshot_generator_1.generateSnapshot)(directory, mavenConfig, snapshotConfig);
         }
         catch (err) {
@@ -475,6 +478,7 @@ const packageData = __nccwpck_require__(2876);
 const DEPGRAPH_MAVEN_PLUGIN_VERSION = '4.0.2';
 function generateSnapshot(directory, mvnConfig, snapshotConfig) {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, _b;
         const depgraph = yield generateDependencyGraph(directory, mvnConfig);
         try {
             const mavenDependencies = new depgraph_1.MavenDependencyGraph(depgraph);
@@ -493,8 +497,12 @@ function generateSnapshot(directory, mvnConfig, snapshotConfig) {
             else {
                 manifest = mavenDependencies.createManifest();
             }
+            core.info(`Snapshot config: ${JSON.stringify(snapshotConfig)}`);
             const snapshot = new dependency_submission_toolkit_1.Snapshot(getDetector(), snapshotConfig === null || snapshotConfig === void 0 ? void 0 : snapshotConfig.context, snapshotConfig === null || snapshotConfig === void 0 ? void 0 : snapshotConfig.job);
             snapshot.addManifest(manifest);
+            snapshot.job.id = (snapshotConfig === null || snapshotConfig === void 0 ? void 0 : snapshotConfig.matrixIdentifier)
+                ? `${(_a = snapshot.job) === null || _a === void 0 ? void 0 : _a.id}-${snapshotConfig === null || snapshotConfig === void 0 ? void 0 : snapshotConfig.matrixIdentifier}`
+                : (_b = snapshot === null || snapshot === void 0 ? void 0 : snapshot.job) === null || _b === void 0 ? void 0 : _b.id;
             const specifiedRef = getNonEmtptyValue(snapshotConfig === null || snapshotConfig === void 0 ? void 0 : snapshotConfig.ref);
             if (specifiedRef) {
                 snapshot.ref = specifiedRef;

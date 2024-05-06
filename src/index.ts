@@ -12,13 +12,16 @@ async function run() {
       settingsFile: core.getInput('settings-file'),
       mavenArgs: core.getInput('maven-args') || '',
     }
+    const matrixIdentifier = core.getInput('matrix-identifier');
     const snapshotConfig: SnapshotConfig = {
       includeManifestFile: core.getBooleanInput('snapshot-include-file-name'),
       manifestFile: core.getInput('snapshot-dependency-file-name'),
       sha: core.getInput('snapshot-sha'),
       ref: core.getInput('snapshot-ref'),
+      matrixIdentifier: matrixIdentifier
     }
 
+    core.info(`Snapshot config: ${JSON.stringify(snapshotConfig)}`);
     snapshot = await generateSnapshot(directory, mavenConfig, snapshotConfig);
   } catch (err: any) {
     core.error(err);
