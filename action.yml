@@ -52,8 +52,8 @@ inputs:
     required: false
     default: ''
 
-  matrix-identifier:
-    description: An optional identifier for matrix-based workflows to ensure unique job parameters
+  correlator:
+    description: An optional identifier for matrix-based workflows to avoid race conditions when submitting multiple snapshots
     type: string
     required: false
 
