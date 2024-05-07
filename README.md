@@ -50,30 +50,7 @@ Upon success it will generate a snapshot captured from Maven POM like;
 
 ### Configuring for Matrix-Based Workflows
 
-To ensure that the job parameter of the submission remains unique when the action is being called from a workflow that has a matrix, you can pass a matrix identifier to the action. This identifier will be appended to the job name, ensuring uniqueness across matrix jobs.
-
-Example of passing a matrix identifier:
-
-```yaml
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [10, 12, 14]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Submit Dependency Snapshot
-      uses: advanced-security/maven-dependency-submission-action@v3
-      with:
-        directory: ${{ github.workspace }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        matrix-identifier: ${{ matrix.node }}
-```
-
-This configuration will append the node version from the matrix to the job name, ensuring that each job submission is unique.
-
-Additionally, when dealing with Maven-based Java projects that utilize different `pom.xml` files across matrix jobs, you can specify the `pom.xml` file relevant to each matrix job. This ensures that the dependency snapshot accurately reflects the dependencies for each specific configuration.
+To ensure that the job parameter of the submission remains unique when the action is being called from a workflow that has a matrix, you can pass a matrix identifier to the action. This identifier will be appended to the job name, ensuring uniqueness across matrix jobs. When dealing with Maven-based Java projects that utilize different `pom.xml` files across matrix jobs, you can specify the `pom.xml` file relevant to each matrix job. This ensures that the dependency snapshot accurately reflects the dependencies for each specific configuration.
 
 Example of specifying `pom.xml` files for different matrix jobs:
 
