@@ -99,8 +99,7 @@ jobs:
       with:
         directory: ${{ github.workspace }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        matrix-identifier: java-${{ matrix.java-version }}
-        pom-file: ${{ matrix.pom-file }}
+        matrix-identifier: ${{ matrix.pom-file }}
 ```
 
 In this example, the action is configured to use different `pom.xml` files (`pom-java8.xml` for Java 8 and `pom-java11.xml` for Java 11) based on the Java version specified in the matrix. This ensures that the dependency snapshot is accurate for each Java version being tested.
