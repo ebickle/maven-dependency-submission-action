@@ -45,8 +45,6 @@ export async function generateSnapshot(directory: string, mvnConfig?: MavenConfi
       manifest = mavenDependencies.createManifest();
     }
 
-    core.info(`Snapshot config: ${JSON.stringify(snapshotConfig)}`);
-
     const snapshot = new Snapshot(getDetector(), snapshotConfig?.context, snapshotConfig?.job);
     snapshot.addManifest(manifest);
 

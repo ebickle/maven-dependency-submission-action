@@ -245,15 +245,16 @@ function run() {
                 settingsFile: core.getInput('settings-file'),
                 mavenArgs: core.getInput('maven-args') || '',
             };
-            const matrixIdentifier = core.getInput('matrix-identifier');
             const snapshotConfig = {
                 includeManifestFile: core.getBooleanInput('snapshot-include-file-name'),
                 manifestFile: core.getInput('snapshot-dependency-file-name'),
                 sha: core.getInput('snapshot-sha'),
                 ref: core.getInput('snapshot-ref'),
-                matrixIdentifier: matrixIdentifier
             };
-            core.info(`Snapshot config: ${JSON.stringify(snapshotConfig)}`);
+            const matrixIdentifier = core.getInput('matrix-identifier');
+            if (matrixIdentifier) {
+                snapshotConfig.matrixIdentifier = matrixIdentifier;
+            }
             snapshot = yield (0, snapshot_generator_1.generateSnapshot)(directory, mavenConfig, snapshotConfig);
         }
         catch (err) {
@@ -497,7 +498,6 @@ function generateSnapshot(directory, mvnConfig, snapshotConfig) {
             else {
                 manifest = mavenDependencies.createManifest();
             }
-            core.info(`Snapshot config: ${JSON.stringify(snapshotConfig)}`);
             const snapshot = new dependency_submission_toolkit_1.Snapshot(getDetector(), snapshotConfig === null || snapshotConfig === void 0 ? void 0 : snapshotConfig.context, snapshotConfig === null || snapshotConfig === void 0 ? void 0 : snapshotConfig.job);
             snapshot.addManifest(manifest);
             snapshot.job.id = (snapshotConfig === null || snapshotConfig === void 0 ? void 0 : snapshotConfig.matrixIdentifier)
