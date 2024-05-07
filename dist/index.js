@@ -251,7 +251,7 @@ function run() {
                 sha: core.getInput('snapshot-sha'),
                 ref: core.getInput('snapshot-ref'),
             };
-            const matrixIdentifier = core.getInput('matrix-identifier');
+            const matrixIdentifier = core.getInput('correlator');
             if (matrixIdentifier) {
                 snapshotConfig.matrixIdentifier = matrixIdentifier;
             }
