@@ -48,9 +48,9 @@ export async function generateSnapshot(directory: string, mvnConfig?: MavenConfi
     const snapshot = new Snapshot(getDetector(), snapshotConfig?.context, snapshotConfig?.job);
     snapshot.addManifest(manifest);
 
-    snapshot.job.id = snapshotConfig?.matrixIdentifier
-      ? `${snapshot.job?.id}-${snapshotConfig?.matrixIdentifier}`
-      : snapshot?.job?.id;
+    snapshot.job.correlator = snapshotConfig?.matrixIdentifier
+      ? `${snapshot.job.correlator}-${snapshotConfig.matrixIdentifier}`
+      : snapshot.job?.correlator;
 
     const specifiedRef = getNonEmtptyValue(snapshotConfig?.ref);
     if (specifiedRef) {
