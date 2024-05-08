@@ -50,7 +50,7 @@ Upon success it will generate a snapshot captured from Maven POM like;
 
 ### Configuring for Matrix-Based Workflows
 
-To ensure that the job parameter of the submission remains unique when the action is being called from a workflow that has a matrix, you can pass a matrix identifier to the action. This identifier will be appended to the job name, ensuring uniqueness across matrix jobs. When dealing with Maven-based Java projects that utilize different `pom.xml` files across matrix jobs, you can specify the `pom.xml` file relevant to each matrix job. This ensures that the dependency snapshot accurately reflects the dependencies for each specific configuration.
+To ensure that the job parameter of the submission remains unique when the action is being called from a workflow that has a matrix, you can pass a `correlator` to the action. This identifier will be appended to the default correlator propterty of a job, ensuring uniqueness across matrix-based workflows. When dealing with Maven-based Java projects that utilize different `pom.xml` files across matrix jobs, you can specify the `directory` relevant to each matrix job. This ensures that the dependency snapshot accurately reflects the dependencies for each specific configuration.
 
 Example of specifying `pom.xml` files for different matrix jobs:
 
@@ -62,9 +62,9 @@ jobs:
       matrix:
         include:
           - java-version: 8
-            pom-file: 'pom-java8.xml'
+            directory: project1
           - java-version: 11
-            pom-file: 'pom-java11.xml'
+            directory: project2
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK ${{ matrix.java-version }}
@@ -74,12 +74,11 @@ jobs:
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v3
       with:
-        directory: ${{ github.workspace }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        matrix-identifier: ${{ matrix.pom-file }}
+        directory: ${{ matrix.directory }}
+        correlator: ${{ github.job }}-${{ matrix.directory }}
 ```
 
-In this example, the action is configured to use different `pom.xml` files (`pom-java8.xml` for Java 8 and `pom-java11.xml` for Java 11) based on the Java version specified in the matrix. This ensures that the dependency snapshot is accurate for each Java version being tested.
+In this example, the action is configured to use different working directories based on the Java version specified in the matrix. This ensures that the dependency snapshot is accurate for each Java version being tested.
 
 ## Command Line Usage
 

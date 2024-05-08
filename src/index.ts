@@ -20,9 +20,9 @@ async function run() {
       ref: core.getInput('snapshot-ref'),
     }
 
-    const matrixIdentifier = core.getInput('correlator');
-    if (matrixIdentifier) {
-      snapshotConfig.matrixIdentifier = matrixIdentifier;
+    const correlator = core.getInput('correlator');
+    if (correlator) {
+      snapshotConfig.correlator = correlator;
     }
 
     snapshot = await generateSnapshot(directory, mavenConfig, snapshotConfig);

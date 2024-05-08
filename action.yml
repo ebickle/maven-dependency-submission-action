@@ -53,7 +53,7 @@ inputs:
     default: ''
 
   correlator:
-    description: An optional identifier for matrix-based workflows to avoid race conditions when submitting multiple snapshots
+    description: An optional identifier to distinguish between multiple dependency snapshots of the same type
     type: string
     required: false
 
