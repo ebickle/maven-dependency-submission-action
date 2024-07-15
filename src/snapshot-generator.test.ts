@@ -68,5 +68,23 @@ describe('snapshot-generator', () => {
       expect(snapshot.detector.version).toBe(version);
       expect(snapshot.manifests['problem-dependency-graph-2602'].countDependencies()).toBe(230);
     }, 40000);
+
+    it('should set job correlator when specified', async() => {
+      const snapshotConfig = {
+        correlator: 'correlator-test'
+      };
+
+      const projectDir = getMavenProjectDirectory('simple');
+      const snapshot = await generateSnapshot(projectDir, undefined, snapshotConfig);
+
+      expect(snapshot.job.correlator).toBe(snapshotConfig.correlator);
+    }, 20000);
+
+    it('should use a default job correlator when not specified', async() => {
+      const projectDir = getMavenProjectDirectory('simple');
+      const snapshot = await generateSnapshot(projectDir);
+
+      expect(snapshot.job.correlator).toBeTruthy();
+    }, 20000);
   });
 });
